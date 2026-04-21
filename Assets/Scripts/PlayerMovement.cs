@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
@@ -28,20 +28,30 @@ public class PlayerMovement : MonoBehaviour
         rb2d.linearVelocity = new Vector2(hinput * Speed, rb2d.linearVelocity.y);
 
 
-        if (jumpAction.triggered && countJump < maxJump) 
+        if (jumpAction.triggered && countJump < maxJump)
         {
+            rb2d.linearVelocity = new Vector2(rb2d.linearVelocity.x, 0f);
             rb2d.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             countJump++;
-            Debug.Log("Jumped");
+            Debug.Log("Jump : " + countJump);
         }
 
-    
 
+
+
+    }
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Coin"))
+        {
+            Destroy(other.gameObject);
+            Debug.Log("Get Coin");
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.CompareTag("Ground")) 
+        if (other.gameObject.CompareTag("Ground"))
         {
             countJump = 0;
         }
